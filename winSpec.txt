@@ -1,0 +1,539 @@
+TIC TAC TOE MASTER DOC
+
+Logic Tree:
+	1. Check for win -> Win
+		2. Check for draw -> Draw
+			3. Check for player win -> Block
+				4. Check for best case scenario -> Random choose 1 or 2
+					5. Else -> Random choose any spot
+
+All winTypes + winSpecs:
+	[winType] winCon = Guaranteed victory:
+		[winSpec] * blunder = player fails to block
+		[winSpec] midTrap = AI moves first, player picks an outside middle -- same logic as cornerTrap
+		[winSpec] cornerTrap = AI moves first, player picks a corner -- same logic as midTrap
+		[winSpec] playerTrap = player moves first, creates a triangle
+		[winSpec] squeezeWin = player moves first, squeezes the AI 
+		[winSpec] -- mustPick = AI moves to avoid potential loss
+	[winType] blockDraw = Cat's Game through block logic, so all truly the same:
+		[winSpec] firstDraw = AI moves first, player forces a block
+		[winSpec] trueBlock = Player moves first, forced to block each other
+		[winSpec] bestCase = Player moves first, AI chooses best case and forces a draw
+		[winSpec] easyCode = Player moves first, AI response hard coded for more efficient code
+		
+
+All possibilities if AI moves first
+
+	> AI move 1: AI picks middle
+			- - -
+			- X -
+			- - -
+			
+	[winCon] midTrap:
+		> Player move 1: player picks an outside middle
+				- O -
+				- X -
+				- - -
+		> AI move 2: AI picks corner 
+				- O -   - O X
+				- X -   - X -
+				X - -   - - -
+		> Player move 2: player blocks *
+				- O O   - O X
+				- X -   - X -
+				X - -   O - -
+		> AI move 3: AI sets up win condition/blocks 
+				X O O   - O X    - O X
+				- X -   - X - or - X X
+				X - -   O - X    O - -
+		> Player move 3: player reacts *
+				O O X
+				- X -
+				O - X
+		> AI move 4: AI wins
+				O O X
+				- X X
+				O - X
+				
+	-----------------------------------------------------------
+	
+	> Player move 1: player picks corner
+			- - O
+			- X -
+			- - -
+	> AI move 2: AI picks opposite corner
+			- - O
+			- X -
+			X - -
+			
+	[winCon] cornerTrap:
+		> Player move 2: player picks a non-corner
+				- O O   - - O
+				- X -   O X -
+				X - -   X - -
+		> AI move 3: AI sets up win condition/blocks 
+				X O O   - - O    - - O
+				- X -   O X - or O X -
+				X - -   X - X    X X -
+		> Player move 3: player reacts *
+				X O O
+				O X -
+				X - -
+		> AI move 4: AI wins
+				X O O
+				O X -
+				X - X
+				
+	[draw] firstDraw:
+		> Player move 2: player picks a corner
+				O - O
+				- X -
+				X - -
+		> AI move 3: AI blocks
+				O X O
+				- X -
+				X - -
+		> Player move 3: player blocks *
+				O X O
+				- X -
+				X O -
+		> AI move 4: AI uses best case scenario
+				O X O
+				- X X
+				X O -
+		> Player move 4: player blocks *
+				O X O
+				O X X
+				X O -
+		> AI move 5: AI draws
+				O X O
+				O X X
+				X O X
+				
+---------------------------------------------------------------
+
+All possibilities if player moves first
+
+	> Player move 1: player picks middle
+			- - -
+			- X -
+			- - -	
+	> AI move 1: AI picks corner -- Must choose this to avoid potential guaranteed loss
+			- - O
+			- X -
+			- - -
+	> Player move 2: player picks adj. middle
+			- X O
+			- X -
+			- - -
+	> AI move 2: AI blocks
+			- X O
+			- X -
+			- O -
+	
+	[winCon] playerTrap:
+		> Player move 3: player picks adj. corner
+			X X O
+			- X -
+			- O -
+		> AI move 3: AI blocks
+			X X O
+			- X -
+			- O O
+		> Player move 4: player reacts *
+			X X O
+			- X X
+			- O O
+		> AI move 4: AI wins
+			X X O
+			- X X
+			O O O
+		
+	[blockDraw] trueBlock:
+		> Player move 3: player picks opp. middle
+			- X O
+			X X -
+			- O -
+		> AI move 3: AI blocks
+			- X O
+			X X O
+			- O -
+		> Player move 4: player blocks *
+			- X O
+			X X O
+			- O X
+		> AI move 4: AI blocks
+			O X O
+			X X O
+			- O X
+		> Player move 5: player draws
+			O X O
+			X X O
+			X O X
+	
+	[blockDraw] bestCase:
+		> Player move 3: player picks anything else
+			- X O 
+			- X X
+			- O -
+		> AI move 3: AI 3-5 logic tree
+			- X O
+			O X X
+			- O -
+		> Player move 4: player 3-5 logic tree
+			X X O
+			O X X
+			- O -
+		> AI move 4: AI 3-5 logic tree
+			X X O
+			O X X
+			- O O
+		> Player move 5: player draws
+			X X O
+			O X X
+			X O O
+				
+	-----------------------------------------------------------
+	
+	[blockDraw] bestCase:
+		> Player move 2: player picks adj. corner
+			X - O
+			- X -
+			- - -
+		> AI move 2: AI blocks
+			X - O
+			- X -
+			- - O
+		> Player move 3: player blocks *
+			X - O
+			- X X
+			- - O
+		> AI move 3: AI blocks
+			X - O
+			O X X 
+			- - O
+		> Player move 4: player 3-5 logic tree
+			X X O
+			O X X
+			- - O
+		> AI move 4: AI 3-5 logic tree
+			X X O
+			O X X
+			- O X
+		> Player move 5: player draws
+			X X O
+			O X X
+			X O X
+	
+	[blockDraw] trueBlock:
+		> Player move 2: player picks opp. middle
+			- - O
+			X X -
+			- - -
+		> AI move 2: AI blocks
+			- - O
+			X X O
+			- - -
+		> Player move 3: player blocks *
+			- - O
+			X X O
+			- - X
+		> AI move 3: AI blocks
+			O - O
+			X X O
+			- - X
+		> Player move 4: player blocks *
+			O X O
+			X X O
+			- - X
+		> AI move 4: AI blocks
+			O X O
+			X X O
+			- O X
+		> Player move 5: player draws
+			O X O
+			X X O
+			X O X
+	
+	[blockDraw] bestCase:
+		> Player move 2: player picks opp. corner
+			- - O
+			- X -
+			X - -
+		> AI move 2: AI picks adj. corner -- Must choose this to avoid potential guaranteed loss
+			O - O
+			- X -
+			X - -
+		> Player move 3: player blocks *
+			O X O
+			- X -
+			X - -
+		> AI move 3: AI blocks
+			O X O
+			- X -
+			X O -
+		> Player move 4: player 3-5 logic tree
+			O X O
+			X X -
+			X O -
+		> AI move 4: AI 3-5 logic tree
+			O X O
+			X X O
+			X O -
+		> Player move 5: player draws
+			O X O
+			X X O
+			X O X
+				
+	-----------------------------------------------------------
+	
+	> Player move 1: player picks corner
+		X - -
+		- - -
+		- - -
+	> AI move 1: AI picks middle
+		X - -
+		- O -
+		- - -
+	
+	[blockDraw] trueBlock:
+		> Player move 2: player picks adj. middle
+			X - -
+			X O - 
+			- - -
+		> AI move 2: AI blocks
+			X - -
+			X O -
+			O - -
+		> Player move 3: player blocks *
+			X - X
+			X O -
+			O - -
+		> AI move 3: AI blocks
+			X O X
+			X O -
+			O - -
+		> Player move 4: player blocks *
+			X O X
+			X O -
+			O X -
+		> AI move 4: random decision
+			X O X
+			X O -
+			O X O
+		> Player move 5: player draws
+			X O X
+			X O X
+			O X O
+	
+	[blockDraw] bestCase:
+		> Player move 2: player picks adj. corner
+			X - -
+			- O -
+			X - -
+		> AI move 2: AI blocks
+			X - -
+			O O -
+			X - -
+		> Player move 3: player blocks *
+			X - -
+			O O X
+			X - -
+		> AI move 3: AI 3-5 logic tree
+			X O -
+			O O X
+			X - -
+		> Player move 4: 3-5 logic tree *
+			X O -
+			O O X
+			X X -
+		> AI move 4: AI 3-5 logic tree
+			X O -
+			O O X
+			X X O
+		> Player move 5: player draws
+			X O X
+			O O X
+			X X O
+		
+	[blockDraw] easyCode:
+		> Player move 2: player picks opp. middle
+			X - -
+			- O -
+			- X -
+		> AI move 2: AI picks adj. corner
+			X - -
+			- O -
+			O X -
+		> Player move 3: player blocks *
+			X - X
+			- O -
+			O X -
+		> AI move 3: AI blocks
+			X O X
+			- O -
+			O X -
+		> Player move 4: 3-5 logic tree
+			X O X
+			- O -
+			O X X
+		> AI move 4: 3-5 logic tree
+			X O X
+			- O O
+			O X X
+		> Player move 5: player draws
+			X O X
+			X O O
+			O X X
+	
+	[mustPick] midDiagonal:
+		> Player move 2: player picks opp. corner
+			X - -
+			- O -
+			- - X
+		> AI move 2: AI picks any side -- Must choose this to avoid potential guaranteed loss
+			X - -
+			O O -
+			- - X
+		
+		[blockDraw] trueBlock:
+			> Player move 3: player blocks *
+				X - -
+				O O X
+				- - X
+			> AI move 3: AI blocks
+				X - O
+				O O X
+				- - X
+			> Player move 4: player blocks *
+				X - O
+				O O X
+				X - X
+			> AI move 4: AI blocks
+				X - O
+				O O X
+				X O X
+			> Player move 5: player draws
+				X X O
+				O O X
+				X O X	
+						
+	-----------------------------------------------------------
+	
+	> Player move 1: player picks outside middle
+		- - -
+		X - -
+		- - -
+	> AI move 1: AI picks middle
+		- - -
+		X O -
+		- - -
+	
+	[blockDraw] bestCase:
+		> Player move 2: player picks adj. corner
+			X - -
+			X O -
+			- - -
+		> AI move 2: AI blocks
+			X - -
+			X O -
+			O - -
+		> Player move 3: player blocks *
+			X - X
+			X O -
+			O - -
+		> AI move 3: AI blocks
+			X O X
+			X O -
+			O - -
+		> Player move 4: player blocks *
+			X O X
+			X O -
+			O X -
+		> AI move 4: AI random choice
+			X O X
+			X O O
+			O X -
+		> AI move 5: player draws
+			X O X
+			X O O
+			O X X
+	
+	[mustPick] possibleWin:
+		> Player move 2: player picks opp. corner
+			- - -
+			X O -
+			- - X
+		> AI move 2: AI picks opp. adj. corner
+			O - -
+			X O -
+			- - X
+		
+		[winCon] arrowWin:
+			> Player move 3: player picks adj. middle
+				O - -
+				X O X
+				- - X
+			> AI move 3: AI blocks
+				O - O
+				X O X
+				- - X
+			> Player move 4: player reacts
+				O X O
+				X O X
+				- - X
+			> AI move 4: AI wins
+				O X O
+				X O X
+				O - X
+		
+		[blockDraw] bestCase:
+			> Player move 3: player picks anything else
+				O - -
+				X O -
+				- X X
+			> AI move 3: AI 3-5 logic tree
+				O - -
+				X O -
+				O X X
+			> Player move 4: player 3-5 logic tree *
+				O - X
+				X O -
+				O X X
+			> AI move 4: AI 3-5 logic tree
+				O - X
+				X O O
+				O X X
+			> Player move 5: player draws
+				O X X
+				X O O
+				O X X
+	
+	[winCon] squeezeWin:
+		> Player move 2: player picks opp. middle
+			- - -
+			X O X
+			- - -
+		> AI move 2: AI picks anywhere
+			O - -   - O -
+			X O X   X O X
+			- - -   - - -
+		> Player move 3: player blocks *
+			O - -   - O -
+			X O X   X O X
+			- - X   - X -
+		> AI move 3: AI sets up win condition/blocks 
+			O - O   O O -
+			X O X   X O X
+			- - X   - X -
+		> Player move 4: player reacts
+			O X O   O O X 
+			X O X   X O X
+			- - X   - X -
+		> AI move 4: AI wins
+			O X O   O O X
+			X O X   X O X
+			O - X   - X O
+			
+
+	
