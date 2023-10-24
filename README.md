@@ -11,23 +11,23 @@ Uses recursion, if statements, logic trees, and many, many methods. Counts your 
 
 # TicTacToeAI.java
 
-> Contains the main method
-> Prompts the user for their name
-> Creates an object with the player's name and starts the game
+- Contains the main method
+- Prompts the user for their name
+- Creates an object with the player's name and starts the game
 
 ---
 
 # GameCode.java
 
-> Contains all methods retaining to the AI
-> Will continuously prompt the user to make a move, the AI will respond, then repeat
-> Ends when either the AI wins or the board is full (draw)
-> Will keep count of draws and losses
-> Continues to prompt the user if they'd like to play again
+- Contains all methods retaining to the AI
+- Will continuously prompt the user to make a move, the AI will respond, then repeat
+- Ends when either the AI wins or the board is full (draw)
+- Will keep count of draws and losses
+- Continues to prompt the user if they'd like to play again
 
 ---
 
 # winSpec.txt
 
-> Contains a comprehensive list of all winTypes, winSpecs, and possibilities
-> Used purely for reference; file handling is not involved in this program
+- Contains a comprehensive list of all winTypes, winSpecs, and possibilities
+- Used purely for reference; file handling is not involved in this program
