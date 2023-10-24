@@ -25,3 +25,10 @@ Will continuously prompt the user to make a move, the AI will respond, then repe
 Ends when either the AI wins or the board is full (draw)
 Will keep count of draws and losses
 Continues to prompt the user if they'd like to play again
+
+---
+
+# winSpec.txt
+
+Contains a comprehensive list of all winTypes, winSpecs, and possibilities
+Used purely for reference; file handling is not involved in this program
